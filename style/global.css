@@ -1,0 +1,21 @@
+body {
+    font-family: "Roboto Condensed", sans-serif;
+    font-size: 16px;
+}
+
+.g-centered-text {
+    text-align: center;
+}
+
+.g-left-text {
+    text-align: left;
+}
+
+
+@media only screen
+    and (-webkit-min-device-pixel-ratio: 2)
+    and (max-device-width: 736px) {
+        body {
+            font-size: 28px;
+        }
+    }

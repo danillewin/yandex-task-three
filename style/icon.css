@@ -1,0 +1,14 @@
+[class^="icon_"], [class*=" icon_"] {
+  display: inline-block;
+
+  width: 18px;
+  height: 16px;
+
+  vertical-align: middle;
+
+  background-image: url(images/icon.png);
+  background-repeat: no-repeat;
+  background-position: center;
+
+  line-height: 14px;
+}
