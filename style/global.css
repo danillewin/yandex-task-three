@@ -1,4 +1,10 @@
+html {
+    height: 100%;
+}
+
 body {
+    height: 100%;
+
     font-family: "Roboto Condensed", sans-serif;
     font-size: 16px;
 }
@@ -9,6 +15,10 @@ body {
 
 .g-left-text {
     text-align: left;
+}
+
+.g-rotate_90 {
+    transform: rotate(90deg);
 }
 
 

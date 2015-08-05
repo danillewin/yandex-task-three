@@ -1,8 +1,7 @@
 [class^="icon_"], [class*=" icon_"] {
   display: inline-block;
 
-  width: 18px;
-  height: 16px;
+  height: 22px;
 
   vertical-align: middle;
 
@@ -12,3 +11,11 @@
 
   line-height: 14px;
 }
+
+{{#sprites}}
+.icon_{{name}} {
+  background-position: {{px.offset_x}} {{px.offset_y}};
+  width: {{px.width}};
+
+}
+{{/sprites}}

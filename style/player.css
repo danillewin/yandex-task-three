@@ -1,0 +1,47 @@
+.player {
+    height: 100%;
+}
+
+.player:after {
+    display: table;
+    clear: both;
+
+    content: "";
+}
+
+    .player__main {
+        display: inline-block;
+        float: left;
+
+        width: 66%;
+        height: 100%;
+    }
+
+    .player__tracks {
+        display: inline-block;
+        float: right;
+
+        width: 33%;
+        height: 100%;
+    }
+
+    .player__visual {
+
+    }
+
+    .player__controls {
+
+    }
+
+    .player__btn {
+        display: inline-block;
+
+        opacity: 0.4;
+
+        font-size: 22px;
+    }
+
+        .player__btn:hover,
+        .player__btn:focus {
+            opacity: 1;
+        }

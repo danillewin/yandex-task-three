@@ -1,5 +1,5 @@
 {
-    "remove-empty-rulesets": true,
+    "remove-empty-rulesets": false,
     "always-semicolon": true,
     "color-case": "lower",
     "color-shorthand": false,

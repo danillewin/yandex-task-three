@@ -16,10 +16,19 @@ module.exports = function(grunt) {
               files: [{
                  expand: true,
                  cwd: 'images/',
-                 src: ['**/*.{png,jpg,gif}'],
+                 src: ['*.{png,jpg,gif}'],
                  dest: 'images/'
               }]
            }
+        },
+        sprite: {
+            all: {
+                src: 'images/source/*.png',
+                dest: 'images/icon.png',
+                destCss: 'style/icon.css',
+                cssTemplate: 'template.icon.css.handlebars',
+                padding: 3
+            }
         },
         'gh-pages': {
             options: {
@@ -79,8 +88,10 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-gh-pages');
     grunt.loadNpmTasks('grunt-contrib-imagemin');
+    grunt.loadNpmTasks('grunt-spritesmith');
 
     grunt.registerTask('style', ['csscomb', 'cssmin']);
+    grunt.registerTask('sprites', ['sprite', 'style']);
     grunt.registerTask('script', ['uglify:bundle']);
     grunt.registerTask('release', ['imagemin', 'gh-pages']);
 };
