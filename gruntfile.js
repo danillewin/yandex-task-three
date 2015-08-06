@@ -69,14 +69,14 @@ module.exports = function(grunt) {
                 files: 'script/app/**/*.js',
                 tasks: ['script'],
                 options: {
-                    debounceDelay: 250,
+                    debounceDelay: 5000,
                 },
             },
             style: {
                 files: 'style/*.css',
                 tasks: ['style'],
                 options: {
-                  debounceDelay: 250,
+                  debounceDelay: 5000,
                 },
             }
         },

@@ -9,6 +9,10 @@ body {
     font-size: 16px;
 }
 
+.g-hidden {
+    display: none;
+}
+
 .g-centered-text {
     text-align: center;
 }

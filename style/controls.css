@@ -1,0 +1,70 @@
+.controls {
+    position: relative;
+
+    display: flex;
+
+    height: 70px;
+
+    background: #f0f0f0;
+
+    justify-content: space-between;
+}
+
+    .controls__progress {
+        position: absolute;
+
+        width: 100%;
+        height: 5px;
+
+        -webkit-transform: translateY(-100%);
+            -ms-transform: translateY(-100%);
+             -o-transform: translateY(-100%);
+                transform: translateY(-100%);
+
+        background: red;
+    }
+
+    .controls:hover .controls__progress {
+        height: 15px;
+    }
+
+    .controls__btn {
+        display: inline-block;
+
+        margin: 0 10px;
+
+        opacity: 0.4;
+
+        font-size: 22px;
+    }
+
+        .controls__btn:hover,
+        .controls__btn:focus {
+            opacity: 1;
+        }
+
+    .controls__basic {
+        display: inline-block;
+
+        align-self: center;
+    }
+
+    .controls__order {
+        display: inline-block;
+
+        align-self: center;
+    }
+
+    .controls__sound {
+        display: inline-block;
+
+        align-self: center;
+    }
+
+    .controls__eq-pane {
+        position: absolute;
+    }
+
+    .controls__vol-pane {
+        position: absolute;
+    }
