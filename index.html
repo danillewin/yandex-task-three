@@ -28,9 +28,9 @@
                         <div class="controls__btn js-prev-btn">
                             <i class="fa fa-fast-backward"></i>
                         </div>
-                        <div class="controls__btn js-play-btn">
-                            <i class="fa fa-play"></i>
-                            <i class="fa fa-pause"></i>
+                        <div class="controls__btn js-play-btn" data-bind="click: playPause">
+                            <i class="fa fa-play" data-bind="visible: !playing()"></i>
+                            <i class="fa fa-pause" data-bind="visible: playing()"></i>
                         </div>
                         <div class="controls__btn js-next-btn">
                             <i class="fa fa-fast-forward"></i>
