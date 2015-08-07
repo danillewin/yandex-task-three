@@ -1,0 +1,46 @@
+.track {
+
+}
+
+    .track__artist {
+        margin-bottom: 12px;
+
+        font-size: 20px;
+    }
+
+    .track__title {
+        overflow: hidden;
+
+        max-width: 205px;
+        margin-bottom: 2px;
+
+        white-space: nowrap;
+        text-overflow: ellipsis;
+
+        font-size: 17px;
+    }
+
+    .track__album {
+        font-size: 14px;
+    }
+
+    .track__year {
+        font-size: 14px;
+    }
+
+    .track__img {
+        display: inline-block;
+
+        width: 70px;
+        height: 70px;
+
+        vertical-align: middle;
+    }
+
+    .track__info {
+        display: inline-block;
+
+        padding: 2px;
+
+        vertical-align: top;
+    }

@@ -59,13 +59,18 @@
         </div>
         <div class="player__tracks">
             <div class="track-list">
-                <div class="track-list__track">
-                    <div class="track">
-                        <div class="track__img"></div>
-                        <div class="track__artist"></div>
-                        <div class="track__title"></div>
-                        <div class="track__length"></div>
+              <div class="track-list__tracks">
+                   <!-- ko foreach: tracks -->
+                    <div class="track track-list__track">
+                        <img class="track__img" data-bind="attr: { src: picture }" />
+                        <span class="track__info">
+                            <div class="track__artist" data-bind="text: artist"></div>
+                            <div class="track__title" data-bind="text: title"></div>
+                            <span class="track__album" data-bind="text: album + (year ? ', ' : '')"></span>
+                            <span class="track__year" data-bind="text: year"></span>
+                        </span>
                     </div>
+                    <!-- /ko -->
                 </div>
                 <div class="track-list__footer">
                     <label>
@@ -74,8 +79,6 @@
                             +
                         </div>
                     </label>
-
-
                     <div class="track-list__tip">
                         Press to add or simply drag&drop
                     </div>

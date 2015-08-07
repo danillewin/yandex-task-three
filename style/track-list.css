@@ -1,4 +1,6 @@
 .track-list {
+    position: relative;
+
     display: flex;
     flex-direction: column;
 
@@ -7,8 +9,33 @@
     justify-content: flex-start;
 }
 
-    .track-list__track {
+.track-list_dragover:after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    display: block;
+
+    content: "";
+    pointer-events: none;
+
+    border: 2px dashed #cccccc;
+    background: rgba(0,0,0,0.4);
+}
+
+    .track-list__tracks {
+        padding: 6px;
+
         flex-grow: 1;
+    }
+
+    .track-list__track {
+        margin-bottom: 5px;
+        padding-bottom: 5px;
+
+        border-bottom: 1px solid #cccccc;
     }
 
     .track-list__footer {
@@ -28,8 +55,9 @@
         padding: 10px;
 
         opacity: 0.4;
-        border: 1px solid #000000;
+        color: white;
         border-radius: 50%;
+        background: red;
 
         font-family: initial;
         font-size: 39px;
@@ -41,6 +69,4 @@
     cursor: pointer;
 
     opacity: 1;
-    color: red;
-    border-color: red;
 }
