@@ -29,6 +29,8 @@
     }
 
     .controls__btn {
+        position: relative;
+
         display: inline-block;
 
         margin: 0 10px;
@@ -39,9 +41,21 @@
     }
 
         .controls__btn:hover,
-        .controls__btn:focus {
+        .controls__btn:focus,
+        .controls__btn:active{
+            cursor: pointer;
+
             opacity: 1;
         }
+
+        .controls__btn_active {
+            opacity: 1;
+            color: red;
+        }
+
+    .controls__btn_volume {
+        width: 20px;
+    }
 
     .controls__basic {
         display: inline-block;
@@ -67,4 +81,31 @@
 
     .controls__vol-pane {
         position: absolute;
+        top: 0;
+        left: -6px;
+
+        display: none;
+
+        padding: 12px 3px;
+
+        -webkit-transform: translate(0, -100%);
+            -ms-transform: translate(0, -100%);
+             -o-transform: translate(0, -100%);
+                transform: translate(0, -100%);
+
+        background: #cccccc;
+    }
+
+        .controls__btn:hover .controls__vol-pane,
+        .controls__btn:active .controls__vol-pane{
+            display: block;
+        }
+
+    .controls__vol-input {
+        width: 8px;
+        height: 90px;
+        padding: 0 5px;
+
+        writing-mode: bt-lr; /* IE */
+        -webkit-appearance: slider-vertical; /* WebKit */
     }

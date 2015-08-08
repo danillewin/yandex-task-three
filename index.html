@@ -11,13 +11,14 @@
     <div class="player">
         <div class="player__main">
             <div class="player__visual">
-
+                <canvas class="js-visualization-canvas player__canvas">
+                </canvas>
             </div>
             <div class="player__controls">
                 <div class="controls">
                     <div class="controls__progress"></div>
                     <div class="controls__order">
-                        <div class="controls__btn js-repeat-btn">
+                        <div class="controls__btn js-repeat-btn" data-bind="click: toggleRepeat, css: { 'controls__btn_active' : repeat()}">
                             <i class="fa fa-undo"></i>
                         </div>
                         <div class="controls__btn js-shuffle-btn">
@@ -25,14 +26,14 @@
                         </div>
                     </div>
                     <div class="controls__basic">
-                        <div class="controls__btn js-prev-btn">
+                        <div class="controls__btn js-prev-btn" data-bind="click: prev">
                             <i class="fa fa-fast-backward"></i>
                         </div>
                         <div class="controls__btn js-play-btn" data-bind="click: playPause">
                             <i class="fa fa-play" data-bind="visible: !playing()"></i>
                             <i class="fa fa-pause" data-bind="visible: playing()"></i>
                         </div>
-                        <div class="controls__btn js-next-btn">
+                        <div class="controls__btn js-next-btn" data-bind="click: next">
                             <i class="fa fa-fast-forward"></i>
                         </div>
                     </div>
@@ -40,19 +41,17 @@
                          <div class="controls__btn js-eq-btn">
                             <i class="fa fa-sliders g-rotate_90"></i>
                         </div>
-                        <div class="controls__btn js-vol-btn">
-                            <i class="fa fa-volume-up"></i>
-                            <i class="fa fa-volume-down"></i>
-                            <i class="fa fa-volume-off"></i>
+                        <div class="controls__btn controls__btn_volume">
+                            <i data-bind="attr: { 'class' : 'fa fa-volume-' + resolveVolumeClass()}, click: toggleMute"></i>
+                            <div class="controls__vol-pane">
+                                <input type="range" class="controls__vol-input" max="100" min="0" data-bind="value: volume, valueUpdate: 'input'">
+                            </div>
                         </div>
                     </div>
                     <div class="controls__eq-pane">
                         <div class="equalizer">
 
                         </div>
-                    </div>
-                    <div class="controls__vol-pane">
-
                     </div>
                 </div>
             </div>

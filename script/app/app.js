@@ -92,8 +92,9 @@ catch(e) {
 
         this.classList.remove("track-list_dragover");
 
-        var file = e.dataTransfer.files[0];
-        self.addTrack(file);
+        for (var key in e.dataTransfer.files) {
+            self.addTrack(e.dataTransfer.files[key]);
+        };
 
         return false;
     });
@@ -121,14 +122,17 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
         var self = this;
 
         self.context = app.AudioContext;
+        self.gainNode = self.context.createGain();
+        self.analyser = self.context.createAnalyser();
+        self.analyser.fftSize = 256;
+        self.canvasCtx = (document.getElementsByClassName("js-visualization-canvas")[0 ]).getContext("2d");
         self.currentTime = ko.observable(0);
-        self.source = self.context.createBufferSource();
         self.playing = ko.observable(false);
-        self.vol = ko.observable();
-        self.repeat = ko.observable();
+        self.volume = ko.observable(100);
+        self.volumeBuffer;
+        self.repeat = ko.observable(true);
         self.shuffle = ko.observable();
         self.equalizer = ko.observable();
-        self.currentTrack = ko.observable();
         self.currentTrack = ko.observable();
         self.tracks = app.TrackList.tracks;
         self.presets = {
@@ -138,11 +142,30 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
             pop: ""
         }
 
+        self.volume.subscribe(function (value) {
+            self.gainNode.gain.value = value / 100;
+        });
+
         self.tracks.subscribe(function () {
             if (self.tracks().length == 1) {
-                self.currentTrack(self.tracks()[0])
+                self.currentTrack(self.tracks()[0]);
             }
         });
+
+        self.resolveVolumeClass = ko.computed(function() {
+            var postfix,
+                volume = self.volume();
+
+            if (volume > 50) {
+                return "up"
+            }
+
+            if (volume <= 50 && volume > 0) {
+                return "down"
+            }
+
+            return "off"
+        })
     }
 
     app.vm.Player.prototype.playPause = function () {
@@ -156,23 +179,17 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
         }
     }
 
-    app.vm.Player.prototype.pause = function () {
-        var self = this;
-
-        self.source.stop();
-        self.playing(false);
-    }
-
     app.vm.Player.prototype.play = function () {
         var self = this;
 
         if (self.currentTrack()){
-            if (!self.source.buffer) {
-                self.source.buffer = self.currentTrack().audio;
-                self.source.connect(self.context.destination);
-            }
+            self.source = self.context.createBufferSource();
+            self.source.buffer = self.currentTrack().audio;
+            self.source.connect(self.gainNode);
+            self.gainNode.connect(self.context.destination);
             self.source.start(0);
             self.playing(true);
+            self.visualize();
         }
         else {
             alert("Upload the track first");
@@ -180,12 +197,128 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
 
     }
 
-    app.vm.Player.prototype.prev = function () {
+    app.vm.Player.prototype.pause = function () {
+        var self = this;
 
+        self.source.stop();
+        self.playing(false);
     }
 
     app.vm.Player.prototype.next = function () {
+        var self = this,
+            index,
+            tracks = self.tracks(),
+            length = tracks.length;
 
+        index = tracks.indexOf(self.currentTrack()) + 1;
+
+        if (index >= length) {
+            if (self.repeat()) {
+                self.setTrack(tracks[0]);
+            } else {
+                return;
+            }
+
+        } else {
+            self.setTrack(tracks[index]);
+        }
+
+    }
+
+    app.vm.Player.prototype.prev = function () {
+        var self = this,
+        index,
+        tracks = self.tracks(),
+        length = tracks.length;
+
+        index = tracks.indexOf(self.currentTrack()) - 1;
+        if (index < 0) {
+
+            if (self.repeat()) {
+                self.setTrack(tracks[length - 1]);
+            } else {
+                return;
+            }
+
+        } else {
+            self.setTrack(tracks[index]);
+        }
+    }
+
+    app.vm.Player.prototype.stop = function () {
+        var self = this;
+
+        self.source.stop();
+        self.playing(false);
+}
+
+    app.vm.Player.prototype.setTrack = function (track) {
+        var self = this;
+
+        self.stop();
+        self.currentTrack(track);
+        self.play();
+    }
+
+    app.vm.Player.prototype.visualize = function () {
+        var self = this,
+            bufferLength = self.analyser.frequencyBinCount,
+            dataArray = new Uint8Array(bufferLength),
+            WIDTH = self.canvasCtx.canvas.width,
+            HEIGHT = self.canvasCtx.canvas.height;
+
+        self.gainNode.connect(self.analyser);
+
+        var draw = function () {
+            var barWidth = Math.floor((WIDTH / bufferLength) * 2),
+                barHeight,
+                drawVisual,
+                x = 0;
+
+            if (self.playing()){
+                drawVisual = requestAnimationFrame(draw);
+
+
+                self.analyser.getByteFrequencyData(dataArray);
+                self.canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
+                for (var i = 0; i < bufferLength; i++) {
+                    barHeight = Math.floor(dataArray[i] / 2);
+
+                    self.canvasCtx.fillStyle = 'rgb(255,0,0)';
+                    self.canvasCtx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight);
+
+                    x += barWidth + 1;
+                }
+            }
+            else {
+            for (var i = 0; i < bufferLength; i++) {
+                    self.canvasCtx.fillStyle = 'rgb(255,0,0)';
+                    self.canvasCtx.fillRect(x, 0, barWidth, 0);
+
+                    x += barWidth + 1;
+                }
+            }
+        };
+
+        draw();
+    }
+
+    app.vm.Player.prototype.toggleMute = function () {
+        var self = this,
+            volume = self.volume();
+
+        if (volume > 0) {
+            self.volumeBuffer = volume;
+            self.volume(0);
+        } else {
+            self.volume(self.volumeBuffer);
+        }
+    }
+
+    app.vm.Player.prototype.toggleRepeat = function () {
+        var self = this;
+
+        self.repeat(!self.repeat());
     }
 
 })(window.app);
