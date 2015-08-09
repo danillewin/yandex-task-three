@@ -25,6 +25,11 @@ body {
     transform: rotate(90deg);
 }
 
+.g-input-vertical {
+    writing-mode: bt-lr; /* IE */
+    -webkit-appearance: slider-vertical; /* WebKit */
+}
+
 
 @media only screen
     and (-webkit-min-device-pixel-ratio: 2)

@@ -112,7 +112,9 @@ catch(e) {
         this.classList.remove("track-list_dragover");
 
         for (var key in e.dataTransfer.files) {
-            self.addTrack(e.dataTransfer.files[key]);
+            if (typeof(e.dataTransfer.files[key]) == 'object') {
+                self.addTrack(e.dataTransfer.files[key]);
+            }
         };
 
         return false;
