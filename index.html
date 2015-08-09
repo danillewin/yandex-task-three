@@ -19,6 +19,8 @@
                     <div class="controls__progress js-control-progress">
                         <div class="controls__progress-inner js-control-progress-inner" data-bind="style: { 'width': currentProgress() + '%'}"></div>
                         <input type="range" min="0" max="100" class="controls__progress-input js-control-progress-input">
+                        <span class="controls__current-time" data-bind="visible: currentProgressTime(), text: currentProgressTime().formatTime()"></span>
+                        <span class="controls__duration" data-bind="visible: currentDuration(), text: currentDuration().formatTime()"></span>
                     </div>
                     <!-- ko with: currentTrack -->
                     <div class="controls__track track">
@@ -47,7 +49,7 @@
                         <div class="controls__btn js-repeat-btn" data-bind="click: toggleRepeat, css: { 'controls__btn_active' : repeat()}">
                             <i class="fa fa-undo"></i>
                         </div>
-                        <div class="controls__btn js-shuffle-btn">
+                        <div class="controls__btn js-shuffle-btn" data-bind="click: toggleShuffle, css: { 'controls__btn_active' : shuffle()}">
                             <i class="fa fa-random"></i>
                         </div>
                     </div>

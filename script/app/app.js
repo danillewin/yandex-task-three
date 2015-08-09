@@ -2,6 +2,25 @@ app = {};
 
 app.vm = {};
 
+app.getRandomInt = function (min, max){
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+Number.prototype.formatTime = function () {
+    var hours   = Math.floor(this / 3600),
+        minutes = Math.floor((this - (hours * 3600)) / 60),
+        seconds = Math.floor(this - (hours * 3600) - (minutes * 60));
+
+    if (minutes < 10) {
+        minutes = "0" + minutes;
+    }
+    if (seconds < 10) {
+        seconds = "0" + seconds;
+    }
+
+    return minutes + ':' + seconds;
+}
+
 try {
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
     app.AudioContext = new AudioContext();
@@ -123,6 +142,7 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
 
         self.context = app.AudioContext;
         self.gainNode = self.context.createGain();
+        self.equalizerNode = self.createFilters();
         self.analyser = self.context.createAnalyser();
         self.analyser.fftSize = 256;
         self.canvasCtx = (document.getElementsByClassName("js-visualization-canvas")[0 ]).getContext("2d");
@@ -131,7 +151,7 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
         self.volume = ko.observable(100);
         self.volumeBuffer;
         self.currentProgress = ko.observable(0);
-        self.currentDuration;
+        self.currentDuration = ko.observable(0);
         self.currentStartTime;
         self.currentProgressTime = ko.observable(0);
         self.repeat = ko.observable(true);
@@ -139,6 +159,7 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
         self.equalizer = ko.observable();
         self.currentTrack = ko.observable();
         self.tracks = app.TrackList.tracks;
+        self.tracksBuffer = [];
         self.chronometer;
         self.presets = {
             jazz : "",
@@ -206,10 +227,11 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
             self.source = self.context.createBufferSource();
             self.source.buffer = self.currentTrack().audio;
             self.source.connect(self.gainNode);
-            self.gainNode.connect(self.context.destination);
+            self.gainNode.connect(self.equalizerNode[0]);
+            self.equalizerNode[self.equalizerNode.length - 1].connect(self.context.destination);
             if (self.currentProgressTime() == 0) {
                 self.currentStartTime = self.context.currentTime;
-                self.currentDuration = self.source.buffer.duration;
+                self.currentDuration(self.source.buffer.duration);
             }
             self.source.start(0, self.currentProgressTime());
             self.playing(true);
@@ -243,6 +265,8 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
             if (self.repeat()) {
                 self.setTrack(tracks[0]);
             } else {
+                self.stop();
+                self.currentTrack(self.tracks()[0]);
                 return;
             }
 
@@ -292,7 +316,7 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
 
     app.vm.Player.prototype.setTime = function (percent) {
         var self = this,
-            time = self.currentDuration / 100 * percent;
+            time = self.currentDuration() / 100 * percent;
 
         self.stop();
         self.currentProgressTime(time);
@@ -302,7 +326,7 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
     app.vm.Player.prototype.onEnd = function () {
         var self = this;
 
-        if (Math.floor(self.currentProgressTime()) >= Math.floor(self.currentDuration)) {
+        if (Math.floor(self.currentProgressTime()) >= Math.floor(self.currentDuration())) {
             self.next()
         }
     }
@@ -368,10 +392,26 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
         self.repeat(!self.repeat());
     }
 
+    app.vm.Player.prototype.toggleShuffle = function () {
+        var self = this;
+
+        self.shuffle(!self.shuffle());
+
+        if (self.shuffle()) {
+            self.tracksBuffer = self.tracks().slice(0);
+            self.tracks(self.tracks().sort(function () {
+                return app.getRandomInt(0,1);
+            }))
+        }
+        else {
+            self.tracks(self.tracksBuffer);
+        }
+    }
+
     app.vm.Player.prototype.startChronometer = function () {
             var self = this,
                 start,
-                duration = self.currentDuration;
+                duration = self.currentDuration();
 
             if (self.currentProgressTime() != 0) {
                 self.currentStartTime = (self.context.currentTime - self.currentProgressTime())
@@ -391,6 +431,31 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
 
         clearInterval(self.chronometer)
     }
+
+    app.vm.Player.prototype.createFilter = function (frequency) {
+        var self = this,
+            filter = self.context.createBiquadFilter();
+
+        filter.type = 'peaking';
+        filter.frequency.value = frequency;
+        filter.Q.value = 1;
+        filter.gain.value = 0;
+
+        return filter;
+    };
+
+    app.vm.Player.prototype.createFilters = function () {
+        var self = this,
+            frequencies = [60, 170, 310, 600, 1000, 3000, 6000, 12000, 14000, 16000],
+            filters = frequencies.map(self.createFilter.bind(self));
+
+        filters.reduce(function (prev, curr) {
+            prev.connect(curr);
+            return curr;
+        });
+
+        return filters;
+    };
 
 })(window.app);
 

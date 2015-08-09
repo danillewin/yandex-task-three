@@ -28,6 +28,43 @@
         background: #bbbbbb;
     }
 
+    .controls__current-time {
+        position: absolute;
+        top: 2px;
+        left: 10px;
+
+        display: none;
+
+        pointer-events: none;
+
+        color: white;
+
+        font-size: 12px;
+    }
+
+    .controls__duration {
+        position: absolute;
+        top: 2px;
+        right: 10px;
+
+        display: none;
+
+        pointer-events: none;
+
+        color: white;
+
+        font-size: 12px;
+    }
+
+        .controls:hover .controls__current-time {
+            display: block;
+        }
+
+        .controls:hover .controls__duration {
+            display: block;
+        }
+
+
     .controls__progress-inner {
         width: 0;
         height: 100%;
