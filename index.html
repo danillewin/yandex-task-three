@@ -17,14 +17,17 @@
             <div class="player__controls">
                 <div class="controls">
                     <div class="controls__progress"></div>
-                    <div class="controls__order">
-                        <div class="controls__btn js-repeat-btn" data-bind="click: toggleRepeat, css: { 'controls__btn_active' : repeat()}">
-                            <i class="fa fa-undo"></i>
-                        </div>
-                        <div class="controls__btn js-shuffle-btn">
-                            <i class="fa fa-random"></i>
-                        </div>
+                    <!-- ko with: currentTrack -->
+                    <div class="controls__track track">
+                        <img class="track__img" data-bind="attr: { src: picture }" />
+                        <span class="track__info">
+                            <div class="track__artist" data-bind="text: artist"></div>
+                            <div class="track__title" data-bind="text: title"></div>
+                            <span class="track__album" data-bind="text: album + (year ? ', ' : '')"></span>
+                            <span class="track__year" data-bind="text: year"></span>
+                        </span>
                     </div>
+                    <!-- /ko -->
                     <div class="controls__basic">
                         <div class="controls__btn js-prev-btn" data-bind="click: prev">
                             <i class="fa fa-fast-backward"></i>
@@ -35,6 +38,14 @@
                         </div>
                         <div class="controls__btn js-next-btn" data-bind="click: next">
                             <i class="fa fa-fast-forward"></i>
+                        </div>
+                    </div>
+                    <div class="controls__order">
+                        <div class="controls__btn js-repeat-btn" data-bind="click: toggleRepeat, css: { 'controls__btn_active' : repeat()}">
+                            <i class="fa fa-undo"></i>
+                        </div>
+                        <div class="controls__btn js-shuffle-btn">
+                            <i class="fa fa-random"></i>
                         </div>
                     </div>
                     <div class="controls__sound">

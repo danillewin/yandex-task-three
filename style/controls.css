@@ -3,12 +3,16 @@
 
     display: flex;
 
-    height: 70px;
+    height: 78px;
 
     background: #f0f0f0;
 
     justify-content: space-between;
 }
+
+    .controls__track {
+        align-self: center;
+    }
 
     .controls__progress {
         position: absolute;
