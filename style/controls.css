@@ -25,7 +25,18 @@
              -o-transform: translateY(-100%);
                 transform: translateY(-100%);
 
+        background: #bbbbbb;
+    }
+
+    .controls__progress-inner {
+        width: 0;
+        height: 100%;
+
         background: red;
+    }
+
+    .controls__progress-input {
+        display: none;
     }
 
     .controls:hover .controls__progress {

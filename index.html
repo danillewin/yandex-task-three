@@ -16,7 +16,10 @@
             </div>
             <div class="player__controls">
                 <div class="controls">
-                    <div class="controls__progress"></div>
+                    <div class="controls__progress js-control-progress">
+                        <div class="controls__progress-inner js-control-progress-inner" data-bind="style: { 'width': currentProgress() + '%'}"></div>
+                        <input type="range" min="0" max="100" class="controls__progress-input js-control-progress-input">
+                    </div>
                     <!-- ko with: currentTrack -->
                     <div class="controls__track track">
                         <img class="track__img" data-bind="attr: { src: picture }" />

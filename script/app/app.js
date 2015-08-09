@@ -130,11 +130,16 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
         self.playing = ko.observable(false);
         self.volume = ko.observable(100);
         self.volumeBuffer;
+        self.currentProgress = ko.observable(0);
+        self.currentDuration;
+        self.currentStartTime;
+        self.currentProgressTime = ko.observable(0);
         self.repeat = ko.observable(true);
         self.shuffle = ko.observable();
         self.equalizer = ko.observable();
         self.currentTrack = ko.observable();
         self.tracks = app.TrackList.tracks;
+        self.chronometer;
         self.presets = {
             jazz : "",
             normal: "",
@@ -156,16 +161,32 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
             var postfix,
                 volume = self.volume();
 
-            if (volume > 50) {
+            if (volume > 80) {
                 return "up"
             }
 
-            if (volume <= 50 && volume > 0) {
+            if (volume <= 80 && volume > 0) {
                 return "down"
             }
 
             return "off"
         })
+
+        self.bindProgressBar();
+    }
+
+    app.vm.Player.prototype.bindProgressBar = function () {
+        var wrapper = document.getElementsByClassName('js-control-progress')[0],
+            inner = document.getElementsByClassName('js-control-progress-inner')[0],
+            input = document.getElementsByClassName('js-control-progress-input')[0],
+            progress;
+
+        wrapper.addEventListener('click', function(e) {
+            inner.style.width = e.offsetX + "px";
+
+            progress = Math.floor((e.offsetX / wrapper.offsetWidth) * 100);
+            input.value = progress;
+        }, false);
     }
 
     app.vm.Player.prototype.playPause = function () {
@@ -187,7 +208,12 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
             self.source.buffer = self.currentTrack().audio;
             self.source.connect(self.gainNode);
             self.gainNode.connect(self.context.destination);
-            self.source.start(0);
+            if (self.currentProgressTime() == 0) {
+                self.currentStartTime = self.context.currentTime;
+                self.currentDuration = self.source.buffer.duration;
+            }
+            self.source.start(0, self.currentProgressTime());
+            self.startChronometer();
             self.playing(true);
             self.visualize();
         }
@@ -202,6 +228,7 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
 
         self.source.stop();
         self.playing(false);
+        self.killChronometer();
     }
 
     app.vm.Player.prototype.next = function () {
@@ -249,6 +276,9 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
         var self = this;
 
         self.source.stop();
+        self.killChronometer();
+        self.currentProgress(0);
+        self.currentProgressTime(0);
         self.playing(false);
 }
 
@@ -319,6 +349,30 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
         var self = this;
 
         self.repeat(!self.repeat());
+    }
+
+    app.vm.Player.prototype.startChronometer = function () {
+            var self = this,
+                start,
+                duration = self.currentDuration;
+
+            if (self.currentProgressTime() != 0) {
+                self.currentStartTime = (self.context.currentTime - self.currentProgressTime())
+            }
+
+            start = self.currentStartTime;
+            self.chronometer = setInterval(function () {
+                var current = self.context.currentTime;
+                self.currentProgressTime(current - start);
+                self.currentProgress((self.currentProgressTime() / duration) * 100);
+            },
+            300);
+    };
+
+    app.vm.Player.prototype.killChronometer = function () {
+        var self = this;
+
+        clearInterval(self.chronometer)
     }
 
 })(window.app);
