@@ -176,16 +176,15 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
     }
 
     app.vm.Player.prototype.bindProgressBar = function () {
-        var wrapper = document.getElementsByClassName('js-control-progress')[0],
+        var self = this,
+            wrapper = document.getElementsByClassName('js-control-progress')[0],
             inner = document.getElementsByClassName('js-control-progress-inner')[0],
             input = document.getElementsByClassName('js-control-progress-input')[0],
             progress;
 
         wrapper.addEventListener('click', function(e) {
-            inner.style.width = e.offsetX + "px";
-
             progress = Math.floor((e.offsetX / wrapper.offsetWidth) * 100);
-            input.value = progress;
+            self.setTime(progress);
         }, false);
     }
 
@@ -213,8 +212,9 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
                 self.currentDuration = self.source.buffer.duration;
             }
             self.source.start(0, self.currentProgressTime());
-            self.startChronometer();
             self.playing(true);
+            self.source.onended = self.onEnd.bind(self);
+            self.startChronometer();
             self.visualize();
         }
         else {
@@ -288,6 +288,23 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
         self.stop();
         self.currentTrack(track);
         self.play();
+    }
+
+    app.vm.Player.prototype.setTime = function (percent) {
+        var self = this,
+            time = self.currentDuration / 100 * percent;
+
+        self.stop();
+        self.currentProgressTime(time);
+        self.play();
+    }
+
+    app.vm.Player.prototype.onEnd = function () {
+        var self = this;
+
+        if (Math.floor(self.currentProgressTime()) >= Math.floor(self.currentDuration)) {
+            self.next()
+        }
     }
 
     app.vm.Player.prototype.visualize = function () {
