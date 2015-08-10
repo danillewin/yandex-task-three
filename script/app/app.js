@@ -170,6 +170,9 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
             pop: ""
         }
 
+        self.visualizations = ['spectrum', 'wave', 'album'];
+        self.visualization = ko.observable(self.visualizations[0]);
+
         self.volume.subscribe(function (value) {
             self.gainNode.gain.value = value / 100;
         });
@@ -458,6 +461,11 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
 
         return filters;
     };
+
+    app.vm.Player.prototype.toggleVisualization = function () {
+        var self = this,
+            index = self.visualizations.indexOf(self.visualization);
+    }
 
 })(window.app);
 
