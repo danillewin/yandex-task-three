@@ -54,9 +54,20 @@
                         </div>
                     </div>
                     <div class="controls__sound">
-                         <div class="controls__btn">
-                            <div class="controls__eq-pane">
-                                <input type="range" class="controls__eq-input g-input-vertical" max="100" min="0">
+                         <div class="controls__btn tooltip__toggle">
+                            <div class="tooltip__body">
+                                <div class="equalizer">
+                                   <div class="equalizer__inputs">
+                                        <!-- ko foreach: equalizerNode -->
+                                        <input type="range" class="equalizer__input g-input-vertical"  min="-16" max="16" step="0.1" data-bind="value: value">
+                                        <!-- /ko -->
+                                    </div>
+                                    <div class="equalizer__presets">
+                                        <!-- ko foreach: presets -->
+                                        <button class="equalizer__preset" data-bind="css: { 'equalizer__preset_active' : $data.name == $root.currentPreset() }, text: name, click: $root.setEqualizer.bind($root)"></button>
+                                        <!-- /ko -->
+                                    </div>
+                                </div>
                             </div>
                             <i class="controls__icon fa fa-sliders g-rotate_90"></i>
                         </div>

@@ -1,0 +1,56 @@
+.equalizer {
+    display: flex;
+
+    width: 350px;
+
+    flex-wrap: nowrap;
+}
+
+    .equalizer__inputs {
+        display: inline-block;
+    }
+
+    .equalizer__input {
+        display: inline-block;
+
+        width: 25px;
+    }
+
+    .equalizer__presets {
+        display: inline-flex;
+        flex-direction: column;
+
+        width: 113px;
+
+        text-align: center;
+
+        justify-content: space-around;
+    }
+
+    .equalizer__preset {
+        display: block;
+
+        width: 100%;
+
+        cursor: pointer;
+        text-align: center;
+        text-transform: uppercase;
+
+        color: rgba(0, 0, 0, 0.4);
+        border: none;
+        outline: none;
+        background: none;
+    }
+
+        .equalizer__preset:hover,
+        .equalizer__preset:focus,
+        .equalizer__preset:active {
+            color: rgba(0, 0, 0, 1);
+        }
+
+        .equalizer__preset_active,
+        .equalizer__preset_active:hover,
+        .equalizer__preset_active:focus,
+        .equalizer__preset_active:active {
+            color: red;
+        }

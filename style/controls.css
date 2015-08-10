@@ -4,6 +4,7 @@
     display: flex;
 
     height: 78px;
+    padding: 0 4px;
 
     background: #f0f0f0;
 
@@ -16,6 +17,7 @@
 
     .controls__progress {
         position: absolute;
+        left: 0;
 
         width: 100%;
         height: 5px;
@@ -92,21 +94,22 @@
 
         margin: 0 10px;
 
-        opacity: 0.4;
+        color: rgba(0, 0, 0, 0.4);
 
         font-size: 22px;
     }
 
-        .controls__btn:hover,
-        .controls__btn:focus,
-        .controls__btn:active{
+        .controls__btn:not(.controls__btn_active):hover,
+        .controls__btn:not(.controls__btn_active):focus,
+        .controls__btn:not(.controls__btn_active):active{
             cursor: pointer;
 
-            opacity: 1;
+            color: rgba(0, 0, 0, 1);
         }
 
         .controls__btn_active {
-            opacity: 1;
+            cursor: pointer;
+
             color: red;
         }
 
@@ -147,7 +150,7 @@
         padding: 12px 5px 30px 5px;
 
         border: 1px solid #999999;
-        background: #f1f1f1;
+        background: #ffffff;
     }
 
         .controls__btn:hover .controls__vol-pane,
@@ -157,30 +160,6 @@
 
     .controls__vol-input {
         width: 8px;
-        height: 90px;
+        height: 137px;
         padding: 0 5px;
     }
-
-    .controls__eq-pane {
-        position: absolute;
-        z-index: 0;
-        bottom: -3px;
-        left: 22px;
-
-        display: none;
-
-        padding: 12px 5px 30px;
-
-        -webkit-transform: translate(-100%, 0);
-            -ms-transform: translate(-100%, 0);
-             -o-transform: translate(-100%, 0);
-                transform: translate(-100%, 0);
-
-        border: 1px solid #999999;
-        background: #f1f1f1;
-    }
-
-        .controls__btn:hover .controls__eq-pane,
-        .controls__btn:active .controls__eq-pane{
-            display: block;
-        }

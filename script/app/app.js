@@ -158,20 +158,33 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
         self.currentProgressTime = ko.observable(0);
         self.repeat = ko.observable(true);
         self.shuffle = ko.observable();
-        self.equalizer = ko.observable();
         self.currentTrack = ko.observable();
         self.tracks = app.TrackList.tracks;
         self.tracksBuffer = [];
         self.chronometer;
-        self.presets = {
-            jazz : "",
-            normal: "",
-            rock: "",
-            pop: ""
-        }
-
-        self.visualizations = ['spectrum', 'wave', 'album'];
-        self.visualization = ko.observable(self.visualizations[0]);
+        self.currentPreset = ko.observable("normal");
+        self.presets = [
+            {
+                name: "pop",
+                values: [5, 4, 3, 2, 3, 4, 5]
+            },
+            {
+                name: "rock",
+                values: [4, 2, 0, 2, 2, 0, 1]
+            },
+            {
+                name: "jazz",
+                values: [6, 1, 4, 2, 0, 5, 1]
+            },
+            {
+                name: "classic",
+                values: [4, 5, 4, 5, 4, 5, 4]
+            },
+            {
+                name: "normal",
+                values: [0, 0, 0, 0, 0, 0, 0]
+            }
+        ]
 
         self.volume.subscribe(function (value) {
             self.gainNode.gain.value = value / 100;
@@ -444,14 +457,21 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
         filter.type = 'peaking';
         filter.frequency.value = frequency;
         filter.Q.value = 1;
-        filter.gain.value = 0;
+        filter.value = ko.observable();
+
+        filter.value.subscribe(function (val) {
+            filter.gain.value = val;
+        })
+
+        filter.value(0);
+
 
         return filter;
     };
 
     app.vm.Player.prototype.createFilters = function () {
         var self = this,
-            frequencies = [60, 170, 310, 600, 1000, 3000, 6000, 12000, 14000, 16000],
+            frequencies = [60, 310, 600, 1000, 6000, 14000, 16000],
             filters = frequencies.map(self.createFilter.bind(self));
 
         filters.reduce(function (prev, curr) {
@@ -462,9 +482,19 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
         return filters;
     };
 
-    app.vm.Player.prototype.toggleVisualization = function () {
+    app.vm.Player.prototype.setEqualizer = function (data) {
         var self = this,
-            index = self.visualizations.indexOf(self.visualization);
+            preset = [];
+
+        preset = self.presets.filter(function (item) {
+            return item.name == data.name;
+        })[0].values;
+
+        self.currentPreset(data.name);
+
+        for (var i = 0; i < self.equalizerNode.length; i++) {
+            self.equalizerNode[i].value(preset[i]);
+        }
     }
 
 })(window.app);
