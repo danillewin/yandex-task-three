@@ -132,7 +132,20 @@ catch(e) {
     };
 
     app.vm.TrackList.prototype.setTrack = function (data) {
-        app.Player.setTrack(data);
+        var player = app.Player;
+
+        if (player.currentTrack() != data) {
+            player.setTrack(data);
+        }
+        else {
+            if (player.playing()) {
+                player.pause();
+            }
+            else {
+                player.play()
+            }
+
+        }
     };
 
     app.vm.TrackList.prototype.bindPlayer = function () {
