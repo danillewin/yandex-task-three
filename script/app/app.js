@@ -91,45 +91,56 @@ catch(e) {
             tags: ["artist", "title", "album", "year", "lyrics", "picture"],
             dataReader: FileAPIReader(file)
         });
-    }
+    };
 
     app.vm.TrackList.prototype.initDragDrop = function () {
     var self = this;
 
-    document.getElementsByClassName("track-list")[0].addEventListener('dragenter', function (e) {
-        this.classList.add("track-list_dragover");
-    });
+        document.getElementsByClassName("track-list")[0].addEventListener('dragenter', function (e) {
+            this.classList.add("track-list_dragover");
+        });
 
-    document.getElementsByClassName("track-list")[0].addEventListener('dragleave', function (e) {
-        this.classList.remove("track-list_dragover");
-    });
+        document.getElementsByClassName("track-list")[0].addEventListener('dragleave', function (e) {
+            this.classList.remove("track-list_dragover");
+        });
 
-    document.getElementsByClassName("track-list")[0].addEventListener('drop', function (e) {
-        if (e.preventDefault) {
-            e.preventDefault();
-        }
-
-        this.classList.remove("track-list_dragover");
-
-        for (var key in e.dataTransfer.files) {
-            if (typeof(e.dataTransfer.files[key]) == 'object') {
-                self.addTrack(e.dataTransfer.files[key]);
+        document.getElementsByClassName("track-list")[0].addEventListener('drop', function (e) {
+            if (e.preventDefault) {
+                e.preventDefault();
             }
-        };
 
-        return false;
-    });
+            this.classList.remove("track-list_dragover");
 
-    document.getElementsByClassName("track-list")[0].addEventListener('dragover', function (e) {
-        if (e.preventDefault) {
-            e.preventDefault();
-        }
+            for (var key in e.dataTransfer.files) {
+                if (typeof(e.dataTransfer.files[key]) == 'object') {
+                    self.addTrack(e.dataTransfer.files[key]);
+                }
+            };
 
-        e.dataTransfer.dropEffect = 'copy';
+            return false;
+        });
 
-        return false;
-    });
-}
+        document.getElementsByClassName("track-list")[0].addEventListener('dragover', function (e) {
+            if (e.preventDefault) {
+                e.preventDefault();
+            }
+
+            e.dataTransfer.dropEffect = 'copy';
+
+            return false;
+        });
+    };
+
+    app.vm.TrackList.prototype.setTrack = function (data) {
+        app.Player.setTrack(data);
+    };
+
+    app.vm.TrackList.prototype.bindPlayer = function () {
+        var self = this;
+
+        self.currentTrack = app.Player.currentTrack;
+        self.isPlaying = app.Player.playing;
+    };
 
 })(window.app);
 
@@ -356,7 +367,7 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
             WIDTH = self.canvasCtx.canvas.width,
             HEIGHT = self.canvasCtx.canvas.height;
 
-        self.gainNode.connect(self.analyser);
+        self.equalizerNode[self.equalizerNode.length - 1].connect(self.analyser);
 
         var draw = function () {
             var barWidth = Math.floor((WIDTH / bufferLength) * 2),
@@ -500,6 +511,8 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
 })(window.app);
 
 app.Player = new app.vm.Player();
+
+app.TrackList.bindPlayer();
 
 ko.applyBindings(app.Player, document.getElementsByClassName("controls")[0]);
 

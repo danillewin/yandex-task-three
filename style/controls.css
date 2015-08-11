@@ -99,6 +99,12 @@
         font-size: 22px;
     }
 
+        .controls__btn_fixed_22 {
+            width: 22px;
+
+            text-align: center;
+        }
+
         .controls__btn:not(.controls__btn_active):hover,
         .controls__btn:not(.controls__btn_active):focus,
         .controls__btn:not(.controls__btn_active):active{

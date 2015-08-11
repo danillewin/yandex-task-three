@@ -37,7 +37,7 @@
                         <div class="controls__btn js-prev-btn" data-bind="click: prev">
                             <i class="fa fa-fast-backward"></i>
                         </div>
-                        <div class="controls__btn js-play-btn" data-bind="click: playPause">
+                        <div class="controls__btn controls__btn_fixed_22" data-bind="click: playPause">
                             <i class="fa fa-play" data-bind="visible: !playing()"></i>
                             <i class="fa fa-pause" data-bind="visible: playing()"></i>
                         </div>
@@ -84,8 +84,12 @@
         <div class="player__tracks">
             <div class="track-list">
               <div class="track-list__tracks">
-                   <!-- ko foreach: tracks -->
-                    <div class="track track-list__track">
+                    <!-- ko foreach: tracks -->
+                    <div class="track track-list__track" data-bind="click: $root.setTrack">
+                        <div class="track__overlay" data-bind="visible: $root.currentTrack() == $data">
+                            <i class="fa fa-play track__overlay-mark" data-bind="visible: $root.isPlaying()"></i>
+                            <i class="fa fa-pause track__overlay-mark" data-bind="visible: !$root.isPlaying()"></i>
+                        </div>
                         <img class="track__img" data-bind="attr: { src: picture }" />
                         <span class="track__info">
                             <div class="track__artist" data-bind="text: artist"></div>
@@ -94,6 +98,7 @@
                             <span class="track__year" data-bind="text: year"></span>
                         </span>
                     </div>
+                    <div class="track-list__divider"></div>
                     <!-- /ko -->
                 </div>
                 <div class="track-list__footer">

@@ -1,11 +1,32 @@
 .track {
-
+    position: relative;
 }
 
     .track__artist {
         margin-bottom: 12px;
 
         font-size: 20px;
+    }
+
+    .track__overlay {
+        position: absolute;
+
+        width: 70px;
+        height: 70px;
+
+        background-color: rgba(0,0,0, 0.4);
+
+        font-size: 22px;
+    }
+
+    .track__overlay-mark {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+
+        transform: translate(-50%, -50%);
+
+        color: red;
     }
 
     .track__title {
