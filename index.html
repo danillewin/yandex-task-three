@@ -87,8 +87,8 @@
                     <!-- ko foreach: tracks -->
                     <div class="track track-list__track" data-bind="click: $root.setTrack">
                         <div class="track__overlay" data-bind="visible: $root.currentTrack() == $data">
-                            <i class="fa fa-play track__overlay-mark" data-bind="visible: $root.isPlaying()"></i>
-                            <i class="fa fa-pause track__overlay-mark" data-bind="visible: !$root.isPlaying()"></i>
+                            <i class="fa fa-play track__overlay-mark" data-bind="visible: !$root.isPlaying()"></i>
+                            <i class="fa fa-pause track__overlay-mark" data-bind="visible: $root.isPlaying()"></i>
                         </div>
                         <img class="track__img" data-bind="attr: { src: picture }" />
                         <span class="track__info">

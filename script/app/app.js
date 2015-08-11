@@ -342,10 +342,10 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
         var self = this;
 
         self.source.stop();
+        self.playing(false);
         self.killChronometer();
         self.currentProgress(0);
         self.currentProgressTime(0);
-        self.playing(false);
 }
 
     app.vm.Player.prototype.setTrack = function (track) {
