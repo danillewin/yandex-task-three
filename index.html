@@ -59,7 +59,7 @@
                                 <div class="equalizer">
                                    <div class="equalizer__inputs">
                                         <!-- ko foreach: equalizerNode -->
-                                        <input type="range" class="equalizer__input g-input-vertical"  min="-16" max="16" step="0.1" data-bind="value: value">
+                                        <input type="range" orient="vertical" class="equalizer__input g-input-vertical"  min="-16" max="16" step="0.1" data-bind="value: value">
                                         <!-- /ko -->
                                     </div>
                                     <div class="equalizer__presets">
@@ -73,7 +73,7 @@
                         </div>
                         <div class="controls__btn controls__btn_volume">
                             <div class="controls__vol-pane">
-                                <input type="range" class="controls__vol-input g-input-vertical" max="100" min="0" data-bind="value: volume, valueUpdate: 'input'">
+                                <input type="range" orient="vertical" class="controls__vol-input g-input-vertical" max="100" min="0" data-bind="value: volume, valueUpdate: 'input'">
                             </div>
                             <i data-bind="attr: { 'class' : 'controls__icon fa fa-volume-' + resolveVolumeClass()}, click: toggleMute"></i>
                         </div>

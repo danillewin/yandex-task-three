@@ -167,5 +167,6 @@
     .controls__vol-input {
         width: 8px;
         height: 137px;
-        padding: 0 5px;
+        margin: 0;
+        padding: 0 8px;
     }
