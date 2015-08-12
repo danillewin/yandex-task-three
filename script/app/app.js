@@ -116,7 +116,7 @@ catch(e) {
             this.classList.remove("track-list_dragover");
 
             for (var key in files) {
-                if (typeof(files[key]) == 'object' && files[key].type == 'audio/mp3') {
+                if (typeof(files[key]) == 'object' && files[key].type.indexOf('audio') > -1) {
                     self.addTrack(files[key]);
                 }
             };
@@ -355,7 +355,9 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
     app.vm.Player.prototype.setTrack = function (track) {
         var self = this;
 
-        self.stop();
+        if (self.playing()) {
+            self.stop();
+        }
         self.currentTrack(track);
         self.play();
     }
