@@ -247,11 +247,20 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
             wrapper = document.getElementsByClassName('js-control-progress')[0],
             inner = document.getElementsByClassName('js-control-progress-inner')[0],
             input = document.getElementsByClassName('js-control-progress-input')[0],
+            seek = document.getElementsByClassName('js-control-progress-seek')[0],
             progress;
 
         wrapper.addEventListener('click', function(e) {
             progress = Math.floor((e.offsetX / wrapper.offsetWidth) * 100);
             self.setTime(progress);
+        }, false);
+
+        wrapper.addEventListener('mousemove, mousedown', function(e) {
+            seek.style.width = e.offsetX + "px";
+        }, false);
+
+         wrapper.addEventListener('mouseout', function(e) {
+            seek.style.width = "0px";
         }, false);
     }
 
@@ -375,7 +384,7 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
         var self = this,
             time = self.currentDuration() / 100 * percent;
 
-        self.stop();
+        self.pause();
         self.currentProgressTime(time);
         self.play();
     }
