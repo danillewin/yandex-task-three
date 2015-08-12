@@ -105,15 +105,17 @@ catch(e) {
         });
 
         document.getElementsByClassName("track-list")[0].addEventListener('drop', function (e) {
+            var files = e.dataTransfer.files;
+
             if (e.preventDefault) {
                 e.preventDefault();
             }
 
             this.classList.remove("track-list_dragover");
 
-            for (var key in e.dataTransfer.files) {
-                if (typeof(e.dataTransfer.files[key]) == 'object') {
-                    self.addTrack(e.dataTransfer.files[key]);
+            for (var key in files) {
+                if (typeof(files[key]) == 'object' && files[key].type == 'audio/mp3') {
+                    self.addTrack(files[key]);
                 }
             };
 
