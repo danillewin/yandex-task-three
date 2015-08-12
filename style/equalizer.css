@@ -4,6 +4,7 @@
     width: 350px;
 
     flex-wrap: nowrap;
+    justify-content: space-between;
 }
 
     .equalizer__inputs {

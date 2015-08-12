@@ -328,12 +328,21 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
         tracks = self.tracks(),
         length = tracks.length;
 
+        if (self.currentProgressTime() >= 5) {
+            self.stop();
+            self.play();
+            return;
+        }
+
         index = tracks.indexOf(self.currentTrack()) - 1;
+
         if (index < 0) {
 
             if (self.repeat()) {
                 self.setTrack(tracks[length - 1]);
             } else {
+                self.stop();
+                self.currentTrack(self.tracks()[0]);
                 return;
             }
 
