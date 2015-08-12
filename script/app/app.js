@@ -255,7 +255,7 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
             self.setTime(progress);
         }, false);
 
-        wrapper.addEventListener('mousemove, mousedown', function(e) {
+        wrapper.addEventListener('mousemove', function(e) {
             seek.style.width = e.offsetX + "px";
         }, false);
 
