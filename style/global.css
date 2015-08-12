@@ -21,10 +21,6 @@ body {
     text-align: left;
 }
 
-.g-rotate_90 {
-    transform: rotate(90deg);
-}
-
 .g-input-vertical {
     writing-mode: bt-lr; /* IE */
     -webkit-appearance: slider-vertical; /* WebKit */

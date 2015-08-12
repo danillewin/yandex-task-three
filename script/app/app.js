@@ -69,6 +69,7 @@ catch(e) {
             }
 
             track = {
+                loaded: ko.observable(false),
                 artist: tags.artist || "unknown",
                 title: tags.title || "unknown",
                 album: tags.album || "unknown",
@@ -79,6 +80,7 @@ catch(e) {
 
             reader.onload = function () {
                 context.decodeAudioData(reader.result, function(audio){
+                    track.loaded(true);
                     track.audio = audio;
                 });
 
@@ -267,7 +269,7 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
     app.vm.Player.prototype.play = function () {
         var self = this;
 
-        if (self.currentTrack()){
+        if (self.currentTrack().loaded()){
             self.source = self.context.createBufferSource();
             self.source.buffer = self.currentTrack().audio;
             self.source.connect(self.gainNode);

@@ -69,7 +69,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <i class="controls__icon fa fa-sliders g-rotate_90"></i>
+                            <i class="controls__icon fa fa-sliders fa-rotate-90"></i>
                         </div>
                         <div class="controls__btn controls__btn_volume">
                             <div class="controls__vol-pane">
@@ -86,9 +86,14 @@
               <div class="track-list__tracks">
                     <!-- ko foreach: tracks -->
                     <div class="track track-list__track" data-bind="click: $root.setTrack">
-                        <div class="track__overlay" data-bind="visible: $root.currentTrack() == $data">
+                        <div class="track__overlay" data-bind="visible: $root.currentTrack() == $data || !loaded()">
+                            <!-- ko if: loaded() -->
                             <i class="fa fa-play track__overlay-mark" data-bind="visible: !$root.isPlaying()"></i>
                             <i class="fa fa-pause track__overlay-mark" data-bind="visible: $root.isPlaying()"></i>
+                            <!-- /ko -->
+                            <!-- ko if: !loaded() -->
+                            <i class="fa fa-circle-o-notch fa-spin track__overlay-load"></i>
+                            <!-- /ko -->
                         </div>
                         <img class="track__img" data-bind="attr: { src: picture }" />
                         <span class="track__info">

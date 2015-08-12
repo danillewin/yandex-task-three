@@ -14,7 +14,7 @@
         width: 70px;
         height: 70px;
 
-        background-color: rgba(0,0,0, 0.4);
+        background-color: rgba(0,0,0, 0.6);
 
         font-size: 22px;
     }
@@ -27,6 +27,16 @@
         transform: translate(-50%, -50%);
 
         color: red;
+    }
+
+    .track__overlay-load {
+        position: absolute;
+        top: 33%;
+        left: 34%;
+
+        color: red;
+
+        font-size: 26px;
     }
 
     .track__title {
