@@ -1,16 +1,20 @@
 .track {
     position: relative;
+
     min-width: 335px;
 }
 
     .track__artist {
-        margin-bottom: 12px;
-        font-size: 20px;
         overflow: hidden;
-        text-overflow: ellipsis;
+
         max-width: 215px;
+        margin-bottom: 12px;
+
         white-space: nowrap;
         white-space: nowrap;
+        text-overflow: ellipsis;
+
+        font-size: 20px;
     }
 
     .track__overlay {
@@ -57,12 +61,15 @@
     }
 
     .track__album {
-        font-size: 14px;
         display: inline-block;
         overflow: hidden;
-        text-overflow: ellipsis;
+
         max-width: 180px;
+
         white-space: nowrap;
+        text-overflow: ellipsis;
+
+        font-size: 14px;
     }
 
     .track__year {

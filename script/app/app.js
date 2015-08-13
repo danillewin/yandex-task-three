@@ -380,9 +380,7 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
     app.vm.Player.prototype.setTrack = function (track) {
         var self = this;
 
-        if (self.playing()) {
-            self.stop();
-        }
+        self.stop();
         self.currentTrack(track);
         self.play();
     }
