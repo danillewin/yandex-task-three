@@ -290,15 +290,16 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
             self.source.connect(self.gainNode);
             self.gainNode.connect(self.equalizerNode[0]);
             self.equalizerNode[self.equalizerNode.length - 1].connect(self.context.destination);
+            self.equalizerNode[self.equalizerNode.length - 1].connect(self.analyser);
             if (self.currentProgressTime() == 0) {
                 self.currentStartTime = self.context.currentTime;
                 self.currentDuration(self.source.buffer.duration);
             }
             self.source.start(0, self.currentProgressTime());
             self.playing(true);
+            self.visualize();
             self.source.onended = self.onEnd.bind(self);
             self.startChronometer();
-            self.visualize();
         }
         else {
             alert("Upload the track first");
@@ -409,7 +410,7 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
             WIDTH = self.canvasCtx.canvas.width,
             HEIGHT = self.canvasCtx.canvas.height;
 
-        self.equalizerNode[self.equalizerNode.length - 1].connect(self.analyser);
+        cancelAnimationFrame(self.drawAnimationId);
 
         var draw = function () {
             var barWidth = Math.floor((WIDTH / bufferLength) * 2),
@@ -417,28 +418,17 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
                 drawVisual,
                 x = 0;
 
-            if (self.playing()){
-                drawVisual = requestAnimationFrame(draw);
+            self.drawAnimationId = requestAnimationFrame(draw);
+            self.analyser.getByteFrequencyData(dataArray);
+            self.canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
 
-
-                self.analyser.getByteFrequencyData(dataArray);
-                self.canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
-                for (var i = 0; i < bufferLength; i++) {
-                    barHeight = Math.floor(dataArray[i] / 2);
-
-                    self.canvasCtx.fillStyle = 'rgb(255,0,0)';
-                    self.canvasCtx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight);
-
-                    x += barWidth + 1;
-                }
-            }
-            else {
             for (var i = 0; i < bufferLength; i++) {
-                    self.canvasCtx.fillStyle = 'rgb(255,0,0)';
-                    self.canvasCtx.fillRect(x, 0, barWidth, 0);
+                barHeight = Math.floor(dataArray[i] / 2);
 
-                    x += barWidth + 1;
-                }
+                self.canvasCtx.fillStyle = 'rgb(255,0,0)';
+                self.canvasCtx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight);
+
+                x += barWidth + 1;
             }
         };
 
