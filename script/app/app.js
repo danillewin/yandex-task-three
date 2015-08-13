@@ -241,6 +241,26 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
         })
 
         self.bindProgressBar();
+
+        self.bindKeys();
+    }
+
+    app.vm.Player.prototype.bindKeys = function () {
+        var self = this;
+
+        document.addEventListener("keyup" , function (e) {
+            switch (e.which) {
+                case 32:
+                    self.playPause();
+                    break;
+                case 37:
+                    self.prev();
+                    break;
+                case 39:
+                    self.next();
+                    break;
+            }
+        });
     }
 
     app.vm.Player.prototype.bindProgressBar = function () {
