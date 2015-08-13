@@ -400,7 +400,9 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
     app.vm.Player.prototype.setTrack = function (track) {
         var self = this;
 
-        self.stop();
+        if (self.playing()) {
+            self.stop();
+        }
         self.currentTrack(track);
         self.play();
     }
@@ -415,8 +417,7 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
 
     app.vm.Player.prototype.onEnd = function () {
         var self = this;
-
-        if (Math.floor(self.currentProgressTime()) >= Math.floor(self.currentDuration())) {
+        if (Math.round(self.currentProgressTime()) >= Math.floor(self.currentDuration())) {
             self.next()
         }
     }
@@ -441,8 +442,7 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
             self.canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
 
             for (var i = 0; i < bufferLength; i++) {
-                barHeight = Math.floor(dataArray[i] / 2);
-
+                barHeight = Math.floor(dataArray[i] / 2) + 2;
                 self.canvasCtx.fillStyle = 'rgb(255,0,0)';
                 self.canvasCtx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight);
 
