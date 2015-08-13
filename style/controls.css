@@ -85,6 +85,46 @@
         background: rgba(255, 0, 0, 0.15);
     }
 
+    .controls__progress-tooltip {
+        position: absolute;
+        top: -8px;
+        right: 0;
+
+        display: none;
+
+        padding: 3px 5px;
+
+        transform: translate(50%, -100%);
+        pointer-events: none;
+
+        color: #ffffff;
+        background-color: rgba(255,0,0,0.4);
+
+        font-size: 12px;
+    }
+
+        .controls__progress:hover .controls__progress-tooltip {
+            display: block;
+        }
+
+        .controls__progress-tooltip:after {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+
+            width: 0;
+            height: 0;
+
+            content: "";
+            transform: translate(-50%, 100%);
+
+            border-width: 5px 5px 0 5px;
+            border-style: solid;
+            border-top-color: rgba(255,0,0,0.4);
+        }
+
+
+
     .controls__progress-input {
         display: none;
     }

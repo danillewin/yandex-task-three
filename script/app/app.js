@@ -6,7 +6,7 @@ app.getRandomInt = function (min, max){
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-Number.prototype.formatTime = function () {
+Number.prototype.   formatTime = function () {
     var hours   = Math.floor(this / 3600),
         minutes = Math.floor((this - (hours * 3600)) / 60),
         seconds = Math.floor(this - (hours * 3600) - (minutes * 60));
@@ -184,6 +184,7 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
         self.currentDuration = ko.observable(0);
         self.currentStartTime;
         self.currentProgressTime = ko.observable(0);
+        self.seekTime = ko.observable(0);
         self.repeat = ko.observable(true);
         self.shuffle = ko.observable();
         self.currentTrack = ko.observable();
@@ -251,11 +252,16 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
             progress;
 
         wrapper.addEventListener('click', function(e) {
-            progress = Math.floor((e.offsetX / wrapper.offsetWidth) * 100);
-            self.setTime(progress);
+            self.setTime(self.seekTime());
         }, false);
 
         wrapper.addEventListener('mousemove', function(e) {
+            self.seekTime(Math.floor((e.offsetX / wrapper.offsetWidth) * self.currentDuration()));
+            seek.style.width = e.offsetX + "px";
+        }, false);
+
+        wrapper.addEventListener('mousedown', function(e) {
+            self.seekTime(Math.floor((e.offsetX / wrapper.offsetWidth) * self.currentDuration()));
             seek.style.width = e.offsetX + "px";
         }, false);
 
@@ -380,9 +386,8 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
         self.play();
     }
 
-    app.vm.Player.prototype.setTime = function (percent) {
-        var self = this,
-            time = self.currentDuration() / 100 * percent;
+    app.vm.Player.prototype.setTime = function (time) {
+        var self = this;
 
         self.pause();
         self.currentProgressTime(time);
