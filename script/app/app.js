@@ -96,18 +96,27 @@ catch(e) {
     };
 
     app.vm.TrackList.prototype.initDragDrop = function () {
-    var self = this;
+        var self = this,
+            count = 0;
 
         document.getElementsByClassName("track-list")[0].addEventListener('dragenter', function (e) {
+            count++;
+
             this.classList.add("track-list_dragover");
         });
 
         document.getElementsByClassName("track-list")[0].addEventListener('dragleave', function (e) {
-            this.classList.remove("track-list_dragover");
+            count--;
+
+            if (count == 0) {
+                this.classList.remove("track-list_dragover");
+            }
         });
 
         document.getElementsByClassName("track-list")[0].addEventListener('drop', function (e) {
             var files = e.dataTransfer.files;
+
+            count = 0;
 
             if (e.preventDefault) {
                 e.preventDefault();
