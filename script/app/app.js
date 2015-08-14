@@ -225,7 +225,7 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
             }
         });
 
-        self.resolveVolumeClass = ko.computed(function() {
+        self.resolveVolumeClass = ko.computed(function () {
             var postfix,
                 volume = self.volume();
 
@@ -242,12 +242,6 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
 
         self.bindProgressBar();
 
-        self.bindKeys();
-    }
-
-    app.vm.Player.prototype.bindKeys = function () {
-        var self = this;
-
         document.addEventListener("keyup" , function (e) {
             switch (e.which) {
                 case 32:
@@ -261,6 +255,38 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
                     break;
             }
         });
+
+        document.getElementsByClassName("js-vol-btn")[0].addEventListener("wheel", function (e) {
+
+            if (e.deltaY > 0) {
+                self.soundDown();
+            }
+            else {
+                self.soundUp();
+            }
+        });
+    }
+
+    app.vm.Player.prototype.soundUp = function () {
+        var self = this;
+
+        if (self.volume() <= 90) {
+            self.volume(self.volume() + 10);
+        }
+        else {
+            self.volume(100);
+        }
+    }
+
+    app.vm.Player.prototype.soundDown = function () {
+        var self = this;
+
+        if (self.volume() >= 10) {
+            self.volume(self.volume() - 10);
+        }
+        else {
+            self.volume(0);
+        }
     }
 
     app.vm.Player.prototype.bindProgressBar = function () {
@@ -271,21 +297,21 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
             seek = document.getElementsByClassName('js-control-progress-seek')[0],
             progress;
 
-        wrapper.addEventListener('click', function(e) {
+        wrapper.addEventListener('click', function (e) {
             self.setTime(self.seekTime());
         }, false);
 
-        wrapper.addEventListener('mousemove', function(e) {
+        wrapper.addEventListener('mousemove', function (e) {
             self.seekTime(Math.floor((e.offsetX / wrapper.offsetWidth) * self.currentDuration()));
             seek.style.width = e.offsetX + "px";
         }, false);
 
-        wrapper.addEventListener('mousedown', function(e) {
+        wrapper.addEventListener('mousedown', function (e) {
             self.seekTime(Math.floor((e.offsetX / wrapper.offsetWidth) * self.currentDuration()));
             seek.style.width = e.offsetX + "px";
         }, false);
 
-         wrapper.addEventListener('mouseout', function(e) {
+         wrapper.addEventListener('mouseout', function (e) {
             seek.style.width = "0px";
         }, false);
     }
@@ -322,7 +348,7 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
             self.startChronometer();
         }
         else {
-            alert("Upload the track first");
+            console.log("Upload the track first");
         }
 
     }
@@ -417,7 +443,7 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
 
     app.vm.Player.prototype.onEnd = function () {
         var self = this;
-        if (Math.round(self.currentProgressTime()) >= Math.floor(self.currentDuration())) {
+        if (Math.ceil(self.currentProgressTime()) >= Math.floor(self.currentDuration())) {
             self.next()
         }
     }
