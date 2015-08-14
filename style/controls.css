@@ -72,6 +72,8 @@
         width: 0;
         height: 100%;
 
+        pointer-events: none;
+
         background: red;
     }
 
@@ -81,6 +83,8 @@
 
         width: 0;
         height: 100%;
+
+        pointer-events: none;
 
         background: rgba(255, 0, 0, 0.15);
     }
@@ -195,25 +199,6 @@
     .controls__eq-pane {
         position: absolute;
     }
-
-    .controls__vol-pane {
-        position: absolute;
-        z-index: 0;
-        bottom: -3px;
-        left: -8px;
-
-        display: none;
-
-        padding: 12px 5px 30px 5px;
-
-        border: 1px solid #999999;
-        background: #ffffff;
-    }
-
-        .controls__btn:hover .controls__vol-pane,
-        .controls__btn:active .controls__vol-pane{
-            display: block;
-        }
 
     .controls__vol-input {
         width: 8px;

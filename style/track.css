@@ -1,7 +1,7 @@
 .track {
     position: relative;
 
-    min-width: 335px;
+    width: 338px;
 }
 
     .track__artist {
@@ -73,6 +73,8 @@
     }
 
     .track__year {
+        vertical-align: top;
+
         font-size: 14px;
     }
 

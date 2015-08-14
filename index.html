@@ -74,8 +74,8 @@
                             </div>
                             <i class="controls__icon fa fa-sliders fa-rotate-90"></i>
                         </div>
-                        <div class="controls__btn controls__btn_volume">
-                            <div class="controls__vol-pane">
+                        <div class="controls__btn controls__btn_volume tooltip_slim tooltip__toggle">
+                            <div class="tooltip__body">
                                 <input type="range" orient="vertical" class="controls__vol-input g-input-vertical" max="100" min="0" data-bind="value: volume, valueUpdate: 'input'">
                             </div>
                             <i data-bind="attr: { 'class' : 'controls__icon fa fa-volume-' + resolveVolumeClass()}, click: toggleMute"></i>

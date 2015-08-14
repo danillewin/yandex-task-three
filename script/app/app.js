@@ -304,7 +304,7 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
     app.vm.Player.prototype.play = function () {
         var self = this;
 
-        if (self.currentTrack().loaded()){
+        if (self.currentTrack() && self.currentTrack().loaded()){
             self.source = self.context.createBufferSource();
             self.source.buffer = self.currentTrack().audio;
             self.source.connect(self.gainNode);
@@ -331,6 +331,7 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
         var self = this;
 
         self.source.stop();
+        cancelAnimationFrame(self.drawAnimationId);
         self.playing(false);
         self.killChronometer();
     }
@@ -391,6 +392,7 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
         var self = this;
 
         self.source.stop();
+        cancelAnimationFrame(self.drawAnimationId);
         self.playing(false);
         self.killChronometer();
         self.currentProgress(0);
@@ -428,8 +430,6 @@ ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]
             dataArray = new Uint8Array(bufferLength),
             WIDTH = self.canvasCtx.canvas.width,
             HEIGHT = self.canvasCtx.canvas.height;
-
-        cancelAnimationFrame(self.drawAnimationId);
 
         var draw = function () {
             var barWidth = Math.floor((WIDTH / bufferLength) * 2),
