@@ -8,13 +8,14 @@
         overflow: hidden;
 
         max-width: 215px;
-        margin-bottom: 12px;
+        margin-bottom: 11px;
 
         white-space: nowrap;
         white-space: nowrap;
         text-overflow: ellipsis;
 
         font-size: 20px;
+        line-height: 22px;
     }
 
     .track__overlay {

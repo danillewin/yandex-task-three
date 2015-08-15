@@ -300,8 +300,9 @@
 
     app.vm.Player.prototype.setTime = function (time) {
         var self = this;
-
-        self.pause();
+        if (self.playing()) {
+            self.pause();
+        }
         self.currentProgressTime(time);
         self.play();
     }
@@ -347,7 +348,7 @@
         if (self.currentVisualization == "waveform") {
             var draw = function () {
 
-                var sliceWidth = WIDTH * 1.0 / bufferLength,
+                var sliceWidth = WIDTH * 1.0 / bufferLength + 2,
                     x = 0;
 
                 self.drawAnimationId = requestAnimationFrame(draw);
