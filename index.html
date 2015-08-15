@@ -10,12 +10,12 @@
 <body>
     <div class="player">
         <div class="player__main">
-            <div class="player__visual">
-                <canvas class="js-visualization-canvas player__canvas">
+            <div class="player__visual" data-bind="click: changeVisualization">
+                <canvas class="js-visualization-canvas player__canvas"  width="1040" height="512">
                 </canvas>
             </div>
             <div class="player__controls">
-                <div class="controls">
+                <div class="controls progress__toggle">
                     <!-- ko with: currentTrack -->
                     <div class="controls__track track">
                         <img class="track__img" data-bind="attr: { src: picture }" />
@@ -27,14 +27,14 @@
                         </span>
                     </div>
                     <!-- /ko -->
-                    <div class="controls__progress js-control-progress">
-                        <div class="controls__progress-seek js-control-progress-seek" data-bind="visible: currentProgressTime()">
-                            <div class="controls__progress-tooltip" data-bind="text: seekTime().formatTime()"></div>
+                    <div class="controls__progress progress js-control-progress">
+                        <div class="progress__seek js-control-progress-seek" data-bind="visible: currentProgressTime()">
+                            <div class="progress__tooltip" data-bind="text: seekTime().formatTime()"></div>
                         </div>
-                        <div class="controls__progress-inner js-control-progress-inner" data-bind="style: { 'width': currentProgress() + '%'}"></div>
-                        <input type="range" min="0" max="100" class="controls__progress-input js-control-progress-input">
-                        <span class="controls__current-time" data-bind="visible: currentProgressTime(), text: currentProgressTime().formatTime()"></span>
-                        <span class="controls__duration" data-bind="visible: currentDuration(), text: currentDuration().formatTime()"></span>
+                        <div class="progress__inner js-control-progress-inner" data-bind="style: { 'width': currentProgress() + '%'}"></div>
+                        <input type="range" min="0" max="100" class="progress__input js-control-progress-input">
+                        <span class="progress__current" data-bind="visible: currentProgressTime(), text: currentProgressTime().formatTime()"></span>
+                        <span class="progress__duration" data-bind="visible: currentDuration(), text: currentDuration().formatTime()"></span>
                     </div>
                     <div class="controls__basic">
                         <div class="controls__btn js-prev-btn" data-bind="click: prev">
@@ -74,8 +74,8 @@
                             </div>
                             <i class="controls__icon fa fa-sliders fa-rotate-90"></i>
                         </div>
-                        <div class="controls__btn controls__btn_volume">
-                            <div class="controls__vol-pane">
+                        <div class="controls__btn controls__btn_volume tooltip_slim tooltip__toggle js-vol-btn">
+                            <div class="tooltip__body">
                                 <input type="range" orient="vertical" class="controls__vol-input g-input-vertical" max="100" min="0" data-bind="value: volume, valueUpdate: 'input'">
                             </div>
                             <i data-bind="attr: { 'class' : 'controls__icon fa fa-volume-' + resolveVolumeClass()}, click: toggleMute"></i>
@@ -88,7 +88,7 @@
             <div class="track-list">
               <div class="track-list__tracks">
                     <!-- ko foreach: tracks -->
-                    <div class="track track-list__track" data-bind="click: $root.setTrack">
+                    <div class="track track-list__track" data-bind="click: $root.setTrack.bind($root)">
                         <div class="track__overlay" data-bind="visible: $root.currentTrack() == $data || !loaded()">
                             <!-- ko if: loaded() -->
                             <i class="fa fa-play track__overlay-mark" data-bind="visible: !$root.isPlaying()"></i>
@@ -125,6 +125,7 @@
     </div>
     <script type="text/javascript" src="script/lib/knockout-3.3.0.js"></script>
     <script type="text/javascript" src="script/lib/id3.js"></script>
+    <script type="text/javascript" src="script/lib/base2.js"></script>
     <script type="text/javascript" src="script.min.js"></script>
 </body>
 </html>
