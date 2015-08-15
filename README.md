@@ -1,5 +1,7 @@
 # yandex-task-three
 
+Ссылка на работающий пример: [yandex-task-three](http://danillewin.github.io/yandex-task-three/).
+
 #### Помимо основного задания реализовано:
 
 * Трэк лист вместо одной композиции;
