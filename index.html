@@ -10,8 +10,8 @@
 <body>
     <div class="player">
         <div class="player__main">
-            <div class="player__visual">
-                <canvas class="js-visualization-canvas player__canvas">
+            <div class="player__visual" data-bind="click: changeVisualization">
+                <canvas class="js-visualization-canvas player__canvas"  width="1040" height="512">
                 </canvas>
             </div>
             <div class="player__controls">

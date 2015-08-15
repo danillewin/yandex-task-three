@@ -16,5 +16,6 @@
 
     ko.applyBindings(app.TrackList, document.getElementsByClassName("track-list")[0]);
     ko.applyBindings(app.Player, document.getElementsByClassName("controls")[0]);
+    ko.applyBindings(app.Player, document.getElementsByClassName("player__visual")[0]);
 
 })(window.app);

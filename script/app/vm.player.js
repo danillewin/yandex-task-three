@@ -8,7 +8,7 @@
         self.gainNode = self.context.createGain();
         self.equalizerNode = self.createFilters();
         self.analyser = self.context.createAnalyser();
-        self.analyser.fftSize = 256;
+        self.analyser.fftSize = 512;
         self.canvasCtx = (document.getElementsByClassName("js-visualization-canvas")[0]).getContext("2d");
         self.currentTime = ko.observable(0);
         self.playing = ko.observable(false);
@@ -48,6 +48,8 @@
                 values: [0, 0, 0, 0, 0, 0, 0]
             }
         ]
+        self.visualizations = ["spectrum", "waveform"];
+        self.currentVisualization = self.visualizations[0];
 
         self.volume.subscribe(function (value) {
             self.gainNode.gain.value = value / 100;
@@ -111,6 +113,17 @@
         app.Events.registerEventCallback(self.events.NAMES.TRACK_SWITCH, self.events.REGISTRARS.Player, function (data) {
             self.setTrack(data);
         });
+    }
+
+    app.vm.Player.prototype.changeVisualization = function () {
+        var self = this,
+            visualizations = self.visualizations,
+            length = visualizations.length,
+            index;
+
+        index = (visualizations.indexOf(self.currentVisualization) + 1) % length;
+        self.currentVisualization = visualizations[index];
+        self.visualize();
     }
 
     app.vm.Player.prototype.soundUp = function () {
@@ -203,7 +216,6 @@
         var self = this;
 
         self.source.stop();
-        cancelAnimationFrame(self.drawAnimationId);
         self.playing(false);
         self.killChronometer();
     }
@@ -264,7 +276,6 @@
         var self = this;
 
         self.source.stop();
-        cancelAnimationFrame(self.drawAnimationId);
         self.playing(false);
         self.killChronometer();
         self.currentProgress(0);
@@ -302,33 +313,70 @@
         }
     }
 
-    app.vm.Player.prototype.visualize = function () {
+        app.vm.Player.prototype.visualize = function () {
         var self = this,
             bufferLength = self.analyser.frequencyBinCount,
             dataArray = new Uint8Array(bufferLength),
             WIDTH = self.canvasCtx.canvas.width,
             HEIGHT = self.canvasCtx.canvas.height;
 
-        var draw = function () {
-            var barWidth = Math.floor((WIDTH / bufferLength) * 2),
-                barHeight,
-                drawVisual,
-                x = 0;
+        cancelAnimationFrame(self.drawAnimationId);
 
-            self.drawAnimationId = requestAnimationFrame(draw);
-            self.analyser.getByteFrequencyData(dataArray);
-            self.canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
+        if (self.currentVisualization == "spectrum") {
+            var draw = function () {
+                var barWidth = Math.floor((WIDTH / bufferLength) * 2),
+                    barHeight,
+                    x = 0;
 
-            for (var i = 0; i < bufferLength; i++) {
-                barHeight = Math.floor(dataArray[i] / 2) + 2;
-                self.canvasCtx.fillStyle = 'rgb(255,0,0)';
-                self.canvasCtx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight);
+                self.drawAnimationId = requestAnimationFrame(draw);
+                self.analyser.getByteFrequencyData(dataArray);
+                self.canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
 
-                x += barWidth + 1;
-            }
-        };
+                for (var i = 0; i < bufferLength; i++) {
+                    barHeight = Math.floor(dataArray[i] * 1.5) + 2;
+                    self.canvasCtx.fillStyle = 'rgb(255,0,0)';
+                    self.canvasCtx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight);
 
-        draw();
+                    x += barWidth + 2;
+                }
+            };
+
+            draw();
+        }
+
+        if (self.currentVisualization == "waveform") {
+            var draw = function () {
+
+                var sliceWidth = WIDTH * 1.0 / bufferLength,
+                    x = 0;
+
+                self.drawAnimationId = requestAnimationFrame(draw);
+                self.analyser.getByteTimeDomainData(dataArray);
+                self.canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
+                self.canvasCtx.lineWidth = 2;
+                self.canvasCtx.strokeStyle = 'rgb(255, 0, 0)';
+                self.canvasCtx.beginPath();
+
+                for (var i = 0; i < bufferLength; i++) {
+                    var v = dataArray[i] / 128.0;
+                    var y = v * HEIGHT / 2;
+
+                    if (i === 0) {
+                        self.canvasCtx.moveTo(x, y);
+                    } else {
+                        self.canvasCtx.lineTo(x, y);
+                    }
+
+                    x += sliceWidth;
+                }
+
+                self.canvasCtx.lineTo(WIDTH, HEIGHT / 2);
+                self.canvasCtx.stroke();
+            };
+
+            draw();
+        }
+
     }
 
     app.vm.Player.prototype.toggleMute = function () {
