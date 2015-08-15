@@ -60,7 +60,13 @@ module.exports = function(grunt) {
                     sourceMapName: 'script.map'
                 },
                 files: {
-                    'script.min.js': ['script/app/**/*.js']
+                    'script.min.js': [
+                        'script/app/app.js',
+                        'script/app/vm.events.js',
+                        'script/app/vm.player.js',
+                        'script/app/vm.track-list.js',
+                        'script/app/player.js'
+                    ]
                 }
             }
         },

@@ -74,13 +74,8 @@
                             </div>
                             <i class="controls__icon fa fa-sliders fa-rotate-90"></i>
                         </div>
-<<<<<<< HEAD
-                        <div class="controls__btn controls__btn_volume tooltip_slim tooltip__toggle">
+                        <div class="controls__btn controls__btn_volume tooltip_slim tooltip__toggle js-vol-btn">
                             <div class="tooltip__body">
-=======
-                        <div class="controls__btn controls__btn_volume js-vol-btn">
-                            <div class="controls__vol-pane">
->>>>>>> origin/master
                                 <input type="range" orient="vertical" class="controls__vol-input g-input-vertical" max="100" min="0" data-bind="value: volume, valueUpdate: 'input'">
                             </div>
                             <i data-bind="attr: { 'class' : 'controls__icon fa fa-volume-' + resolveVolumeClass()}, click: toggleMute"></i>
@@ -93,7 +88,7 @@
             <div class="track-list">
               <div class="track-list__tracks">
                     <!-- ko foreach: tracks -->
-                    <div class="track track-list__track" data-bind="click: $root.setTrack">
+                    <div class="track track-list__track" data-bind="click: $root.setTrack.bind($root)">
                         <div class="track__overlay" data-bind="visible: $root.currentTrack() == $data || !loaded()">
                             <!-- ko if: loaded() -->
                             <i class="fa fa-play track__overlay-mark" data-bind="visible: !$root.isPlaying()"></i>
@@ -130,6 +125,7 @@
     </div>
     <script type="text/javascript" src="script/lib/knockout-3.3.0.js"></script>
     <script type="text/javascript" src="script/lib/id3.js"></script>
+    <script type="text/javascript" src="script/lib/base2.js"></script>
     <script type="text/javascript" src="script.min.js"></script>
 </body>
 </html>
