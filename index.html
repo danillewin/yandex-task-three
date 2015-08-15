@@ -15,7 +15,7 @@
                 </canvas>
             </div>
             <div class="player__controls">
-                <div class="controls">
+                <div class="controls progress__toggle">
                     <!-- ko with: currentTrack -->
                     <div class="controls__track track">
                         <img class="track__img" data-bind="attr: { src: picture }" />
@@ -27,14 +27,14 @@
                         </span>
                     </div>
                     <!-- /ko -->
-                    <div class="controls__progress js-control-progress">
-                        <div class="controls__progress-seek js-control-progress-seek" data-bind="visible: currentProgressTime()">
-                            <div class="controls__progress-tooltip" data-bind="text: seekTime().formatTime()"></div>
+                    <div class="controls__progress progress js-control-progress">
+                        <div class="progress__seek js-control-progress-seek" data-bind="visible: currentProgressTime()">
+                            <div class="progress__tooltip" data-bind="text: seekTime().formatTime()"></div>
                         </div>
-                        <div class="controls__progress-inner js-control-progress-inner" data-bind="style: { 'width': currentProgress() + '%'}"></div>
-                        <input type="range" min="0" max="100" class="controls__progress-input js-control-progress-input">
-                        <span class="controls__current-time" data-bind="visible: currentProgressTime(), text: currentProgressTime().formatTime()"></span>
-                        <span class="controls__duration" data-bind="visible: currentDuration(), text: currentDuration().formatTime()"></span>
+                        <div class="progress__inner js-control-progress-inner" data-bind="style: { 'width': currentProgress() + '%'}"></div>
+                        <input type="range" min="0" max="100" class="progress__input js-control-progress-input">
+                        <span class="progress__current" data-bind="visible: currentProgressTime(), text: currentProgressTime().formatTime()"></span>
+                        <span class="progress__duration" data-bind="visible: currentDuration(), text: currentDuration().formatTime()"></span>
                     </div>
                     <div class="controls__basic">
                         <div class="controls__btn js-prev-btn" data-bind="click: prev">
