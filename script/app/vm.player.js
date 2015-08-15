@@ -397,6 +397,21 @@
         self.repeat(!self.repeat());
     }
 
+    app.vm.Player.prototype.sortShuffle = function (array) {
+        var tmp,
+            current,
+            top = array.length;
+
+        if (top) while(--top) {
+            current = Math.floor(Math.random() * (top + 1));
+            tmp = array[current];
+            array[current] = array[top];
+            array[top] = tmp;
+        }
+
+        return array;
+    }
+
     app.vm.Player.prototype.toggleShuffle = function () {
         var self = this;
 
@@ -404,9 +419,7 @@
 
         if (self.shuffle()) {
             self.tracksBuffer = self.tracks().slice(0);
-            self.tracks(self.tracks().sort(function () {
-                return app.getRandomInt(0,1);
-            }))
+            self.tracks(self.sortShuffle(self.tracks()));
         }
         else {
             self.tracks(self.tracksBuffer);
